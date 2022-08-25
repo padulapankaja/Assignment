@@ -1,5 +1,7 @@
+import { ETypeOppertunityStatus } from "./enum.interface";
+
 export interface IOppertunity {
   name: string;
-  status: string;
+  status: ETypeOppertunityStatus;
   customer_id: string;
 }

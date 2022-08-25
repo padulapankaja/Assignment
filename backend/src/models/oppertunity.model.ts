@@ -7,6 +7,7 @@ const oppertunitySchema = new Schema({
   },
   status: {
     type: String,
+    enum: ["New", "Closed-Won", "Closed-Lost"],
     require: true,
   },
 
