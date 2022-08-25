@@ -70,6 +70,7 @@ class Opportunities {
         });
       }
       const id2 = new mongoose.Types.ObjectId(id);
+
       //   const all_customers = await Opportunity.find({ customer_id: id2 });
       const all_customers = await Customer.aggregate([
         {
@@ -84,6 +85,7 @@ class Opportunities {
           },
         },
       ]);
+
       return res.status(200).json({
         success: true,
         message: "Success",
