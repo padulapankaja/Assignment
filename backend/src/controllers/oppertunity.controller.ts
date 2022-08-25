@@ -70,7 +70,22 @@ class Opportunities {
         });
       }
       const id2 = new mongoose.Types.ObjectId(id);
-      const all_customers = await Opportunity.find({ customer_id: id2 });
+
+      //   const all_customers = await Opportunity.find({ customer_id: id2 });
+      const all_customers = await Customer.aggregate([
+        {
+          $match: { _id: id2 },
+        },
+        {
+          $lookup: {
+            from: "oppertunities",
+            localField: "_id",
+            foreignField: "customer_id",
+            as: "oppertunties",
+          },
+        },
+      ]);
+
       return res.status(200).json({
         success: true,
         message: "Success",
