@@ -1,0 +1,90 @@
+.signin {
+  white-space: nowrap;
+  margin: 0px 20px;
+}
+
+.signin span.ant-avatar {
+  margin-right: 9px;
+}
+
+.ant-input {
+  border-radius: 6px;
+}
+.ant-input {
+  height: 40px;
+  border: 1px solid #d9d9d9;
+}
+.font-bold {
+  font-weight: 700;
+}
+.text-dark {
+  color: #141414;
+}
+.ant-btn,
+.ant-radio-group .ant-radio-button-wrapper {
+  font-weight: 600;
+  font-size: 12px;
+  height: 40px;
+  padding: 0 15px;
+  line-height: 40px;
+}
+.ant-btn {
+  box-shadow: 0 2px 4px rgb(0 0 0 / 7%);
+  border-radius: 6px;
+}
+.ant-btn span {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sign-in {
+  padding: 0 20px;
+}
+.layout-default .ant-layout-content {
+  padding-top: 40px;
+}
+.font-regular {
+  font-weight: 400;
+}
+.signin h1 {
+  font-size: 48px;
+  font-weight: 700;
+  color: #141414;
+}
+
+.signin h5 {
+  font-weight: 400;
+  color: #8c8c8c;
+  font-size: 20px;
+  white-space: normal;
+}
+.ant-row.ant-form-item.username {
+  display: block;
+}
+
+.ant-row.ant-form-item.username
+  .ant-col.ant-form-item-label
+  .ant-form-item-required:before {
+  display: none;
+}
+
+.ant-row.ant-form-item.username .ant-col.ant-form-item-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #141414;
+}
+.signin .ant-form-item-control-input button.ant-switch {
+  margin-right: 5px;
+}
+.text-dark {
+  color: #141414;
+}
+.sign-img img {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  display: block;
+}
+.layout-signin {
+  background: #fff;
+}
