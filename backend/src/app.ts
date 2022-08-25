@@ -27,6 +27,10 @@ class App {
   public mountRoutes(): void {
     this.express.use("/api/users", require("./routes/users.route"));
     this.express.use("/api/customers", require("./routes/customer.routes"));
+    this.express.use(
+      "/api/oppertunites",
+      require("./routes/oppertunity.routes")
+    );
   }
 }
 
