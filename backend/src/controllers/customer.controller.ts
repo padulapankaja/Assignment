@@ -2,7 +2,7 @@ import { check, validationResult } from "express-validator";
 import mongoose from "mongoose";
 import { ICustomer } from "../interfaces/customer.interface";
 import { Customer } from "../models/customer.model";
-
+const customerStatus = ['Active','Non-Active', 'Lead']
 class Customers {
   async create_customer(req: any, res: any) {
     try {
@@ -16,21 +16,33 @@ class Customers {
           errors: errors.array(),
         });
       }
-      const { email, name, status, create_date, create_time, other } = req.body;
-
+      const { email, name, status, other } = req.body;
+      if(!customerStatus.includes(status)){
+        return res.status(400).json({
+          success: false,
+          message: "Status must be Active, Non-Active or Lead",
+        });
+      }
+      const existing_customer = await Customer.findOne({email: email});
+      console.log(existing_customer);
+      
+      if(existing_customer){
+        return res.status(400).json({
+          success: false,
+          message: "Customer already registered in the system",
+        });
+      }
       const customer_attr: ICustomer = {
         email,
         name,
         status,
-        create_date,
-        create_time,
         other,
       };
       const new_customer = await Customer.create(customer_attr);
 
       return res.status(200).json({
         success: true,
-        message: "Success",
+        message: "Successfully create a customer",
         data: new_customer,
       });
     } catch (error) {

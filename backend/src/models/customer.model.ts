@@ -10,16 +10,9 @@ const customerSchema = new Schema({
     unique: true,
     require: true,
   },
-  create_date: {
-    type: String,
-    require: true,
-  },
-  create_time: {
-    type: String,
-    require: true,
-  },
   status: {
     type: String,
+    enum : ['Active','Non-Active', 'Lead'],
     require: true,
   },
   other: {

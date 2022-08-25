@@ -1,7 +1,6 @@
+import { ETypeStatus } from './enum.interface'
 export interface ICustomer {
-  status: string;
-  create_date: string;
-  create_time: string;
+  status: ETypeStatus;
   name: string;
   email: string;
   other?: string;
