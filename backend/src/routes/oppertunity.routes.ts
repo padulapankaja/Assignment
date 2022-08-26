@@ -7,6 +7,11 @@ router.post(
   OppertunityController.Validate("create"),
   OppertunityController.create_oppertunity
 );
+router.put(
+  "/",
+  OppertunityController.Validate("update"),
+  OppertunityController.update_oppertunity
+);
 
 router.get(
   "/customer/:id",
