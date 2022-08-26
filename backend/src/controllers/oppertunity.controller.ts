@@ -59,6 +59,59 @@ class Opportunities {
       });
     }
   }
+  async update_oppertunity(req: any, res: any) {
+    try {
+      const errors = validationResult(req);
+
+      // validate request
+      if (!errors.isEmpty()) {
+        return res.status(422).json({
+          success: false,
+          message: "Failed",
+          errors: errors.array(),
+        });
+      }
+      const { _id, status } = req.body;
+      if (!mongoose.isValidObjectId(_id)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid oppertunity id",
+        });
+      }
+      const id2 = new mongoose.Types.ObjectId(_id);
+      if (!customerStatus.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message: "Status must be New, Closed-Won or Closed-Lost",
+        });
+      }
+      const existing_oppertinity = await Opportunity.findOne({ _id: id2 });
+
+      if (!existing_oppertinity) {
+        return res.status(400).json({
+          success: false,
+          message: "Oppertunity not found",
+        });
+      }
+
+      const update_oppertunity = await Opportunity.updateOne(
+        { _id: id2 },
+        { status: status }
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Successfully update an oppertunity",
+        data: update_oppertunity,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Faild",
+        data: error,
+      });
+    }
+  }
 
   async get_all_oppertunites_reated_to_customer(req: any, res: any) {
     try {
@@ -139,6 +192,12 @@ class Opportunities {
           check("name", "Name is required!").exists(),
           check("status", "Status is required!").exists(),
           check("customer_id", "Customer id is required!").exists(),
+        ];
+      }
+      case "update": {
+        return [
+          check("_id", "Id is required!").exists(),
+          check("status", "Status is required!").exists(),
         ];
       }
     }

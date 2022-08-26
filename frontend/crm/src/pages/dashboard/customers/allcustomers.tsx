@@ -1,6 +1,15 @@
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
-import { Button, Input, Space, Table } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  Space,
+  Form,
+  Modal,
+  Select,
+  message,
+} from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import React, { useRef, useState, useEffect } from "react";
@@ -24,9 +33,71 @@ const AllCustomer: React.FC = () => {
   const searchInput = useRef<InputRef>(null);
   const [allCustomers, setAllCustomers]: any = useState();
   const history = useHistory();
+  const [form2] = Form.useForm();
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [editCustomer, setEditCustomer]: any = useState();
+
   useEffect(() => {
     loadAllCustomers();
   }, []);
+
+  const showModal = (data?: any) => {
+    form2.resetFields();
+    setEditCustomer(data);
+    setVisible(true);
+  };
+
+  const handleOk = (values: any) => {
+    console.log(values);
+
+    setConfirmLoading(true);
+
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+    }, 2000);
+    form2.resetFields();
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+    form2.resetFields();
+  };
+
+  const onFinishEdit = (values: any) => {
+    const data: any = {
+      status: values.edit_status,
+      _id: editCustomer._id,
+    };
+    console.log(data);
+
+    // updateOppertunityForCustomr(data)
+    //   .then((res: any) => {
+    //     setVisible(false);
+    //     message.success({
+    //       content: "Successfully update a customer",
+    //     });
+    //     console.log(res.data);
+    //     form2.resetFields();
+    //   })
+    //   .then((res: any) => {
+    //     loadAllCustomers();
+    //   })
+    //   .catch((err) => {
+    //     setVisible(false);
+    //     if (err.response.data) {
+    //       message.error({
+    //         content: err.response.data.message,
+    //       });
+    //     } else {
+    //       message.error({
+    //         content: "Please check network connection",
+    //       });
+    //     }
+    //   });
+  };
 
   const loadAllCustomers = () => {
     getAllCustomers()
@@ -173,6 +244,7 @@ const AllCustomer: React.FC = () => {
       width: "20%",
       render: (_, record) => (
         <Space size="middle" key={record._id}>
+          <Button onClick={() => showModal(record)}>Update Customer</Button>
           <Button
             onClick={() => {
               history.push(`dashboard/customer/${record._id}`);
@@ -185,7 +257,52 @@ const AllCustomer: React.FC = () => {
     },
   ];
 
-  return <Table columns={columns} dataSource={allCustomers} key={1} />;
+  return (
+    <div>
+      {" "}
+      <Table columns={columns} dataSource={allCustomers} key={1} />{" "}
+      <Modal
+        title={`${editCustomer && editCustomer.name}`}
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          layout="vertical"
+          className="row-col"
+          form={form2}
+          onFinish={onFinishEdit}
+          name="editOppertunity"
+          scrollToFirstError
+        >
+          <div className="col-md-4">
+            <Form.Item
+              label="Status"
+              className="username"
+              name="edit_status"
+              rules={[{ required: true, message: "Please select status!" }]}
+            >
+              <Select placeholder="Update status">
+                <Select.Option value="Active">Active</Select.Option>
+                <Select.Option value="Non-Active">Non-Active</Select.Option>
+                <Select.Option value="Lead">Lead</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="col-md-6">
+            <Form.Item>
+              <Button type="primary" htmlType="submit" name="submit">
+                {" "}
+                Submit
+              </Button>
+            </Form.Item>
+          </div>
+        </Form>
+      </Modal>
+    </div>
+  );
 };
 
 export default AllCustomer;

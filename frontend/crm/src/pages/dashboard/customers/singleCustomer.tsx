@@ -1,12 +1,29 @@
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
-import { Button, Input, Space, Table } from "antd";
+import {
+  Button,
+  Input,
+  Space,
+  Table,
+  Modal,
+  Form,
+  Select,
+  message,
+} from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
+import Title from "antd/lib/typography/Title";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import { Link, useParams } from "react-router-dom";
-import { getOppertuntiesBasedOnCustomer } from "../../../controllers/customer.controller";
+import {
+  getOppertuntiesBasedOnCustomer,
+  createOppertunityForCustomr,
+  updateOppertunityForCustomr,
+} from "../../../controllers/customer.controller";
+import "../../../assets/styles/singlecustomer.css";
+import { offset } from "@popperjs/core";
+
 interface DataType {
   key: React.Key;
   _id: string;
@@ -16,6 +33,7 @@ interface DataType {
 }
 
 type DataIndex = keyof DataType;
+type SizeType = Parameters<typeof Form>[0]["size"];
 
 const SingleCustomer: React.FC = () => {
   const [searchText, setSearchText] = useState("");
@@ -23,12 +41,103 @@ const SingleCustomer: React.FC = () => {
   const searchInput = useRef<InputRef>(null);
   const [customerDetails, setcustomerDetails]: any = useState();
   const [oppertunites, setOppertunites]: any = useState();
+  const [editOppertunity, setEditOppertunity]: any = useState();
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [form2] = Form.useForm();
+
   const id: any = useParams();
   useEffect(() => {
-    loadAllCustomers();
+    loadAllOppertunites();
   }, []);
 
-  const loadAllCustomers = () => {
+  const onFinish = (values: any) => {
+    const data: any = {
+      name: values.name,
+
+      status: values.status,
+      customer_id: id.id,
+    };
+    createOppertunityForCustomr(data)
+      .then((res: any) => {
+        message.success({
+          content: "Successfully created an oppertunity",
+        });
+        console.log(res.data);
+        form.resetFields();
+      })
+      .then((res: any) => {
+        loadAllOppertunites();
+      })
+      .catch((err) => {
+        if (err.response.data) {
+          message.error({
+            content: err.response.data.message,
+          });
+        } else {
+          message.error({
+            content: "Please check network connection",
+          });
+        }
+      });
+  };
+  const onFinishEdit = (values: any) => {
+    const data: any = {
+      status: values.edit_status,
+      _id: editOppertunity._id,
+    };
+    updateOppertunityForCustomr(data)
+      .then((res: any) => {
+        setVisible(false);
+        message.success({
+          content: "Successfully update an oppertunity",
+        });
+        console.log(res.data);
+        form2.resetFields();
+      })
+      .then((res: any) => {
+        loadAllOppertunites();
+      })
+      .catch((err) => {
+        setVisible(false);
+        if (err.response.data) {
+          message.error({
+            content: err.response.data.message,
+          });
+        } else {
+          message.error({
+            content: "Please check network connection",
+          });
+        }
+      });
+  };
+
+  const showModal = (data?: any) => {
+    form2.resetFields();
+    setEditOppertunity(data);
+    setVisible(true);
+  };
+
+  const handleOk = (values: any) => {
+    console.log(values);
+
+    setConfirmLoading(true);
+
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+    }, 2000);
+    form2.resetFields();
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+    form2.resetFields();
+  };
+
+  const loadAllOppertunites = () => {
     getOppertuntiesBasedOnCustomer(id.id)
       .then((res: any) => {
         if (res.data.length > 0) {
@@ -174,14 +283,108 @@ const SingleCustomer: React.FC = () => {
       key: "action",
       width: "20%",
       render: (_, record) => (
-        <Space size="middle" key={record._id}>
-          <Link to={`/signin${record._id}`}>View More {record._id}</Link>
-        </Space>
+        <Button type="primary" onClick={() => showModal(record)}>
+          Update Status
+        </Button>
       ),
     },
   ];
 
-  return <Table columns={columns} dataSource={oppertunites} key={1} />;
+  return (
+    <div>
+      <Title level={3}>Add Oppertunity</Title>
+      <Form
+        layout="vertical"
+        className="row-col"
+        form={form}
+        onFinish={onFinish}
+        name="addOppertunity"
+        scrollToFirstError
+      >
+        <div className="row">
+          <div className="col-md-4">
+            <Form.Item
+              label="Name"
+              className="username"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input oppertunity name!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
+          <div className="col-md-4">
+            <Form.Item
+              label="Status"
+              className="username"
+              name="status"
+              rules={[{ required: true, message: "Please select status!" }]}
+            >
+              <Select placeholder="select status">
+                <Select.Option value="New">New</Select.Option>
+                <Select.Option value="Closed-Won">Closed-Won</Select.Option>
+                <Select.Option value="Closed-Lost">Closed-Lost</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="col-md-6">
+            <Form.Item>
+              <Button type="primary" htmlType="submit" name="submit">
+                {" "}
+                Submit
+              </Button>
+            </Form.Item>
+          </div>
+        </div>
+      </Form>
+      <Title level={3}>All Oppertunites</Title>
+      <Table columns={columns} dataSource={oppertunites} key={1} />{" "}
+      <Modal
+        title={`${editOppertunity && editOppertunity.name}`}
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          layout="vertical"
+          className="row-col"
+          form={form2}
+          onFinish={onFinishEdit}
+          name="editOppertunity"
+          scrollToFirstError
+        >
+          <div className="col-md-4">
+            <Form.Item
+              label="Status"
+              className="username"
+              name="edit_status"
+              rules={[{ required: true, message: "Please select status!" }]}
+            >
+              <Select placeholder="Update status">
+                <Select.Option value="New">New</Select.Option>
+                <Select.Option value="Closed-Won">Closed-Won</Select.Option>
+                <Select.Option value="Closed-Lost">Closed-Lost</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="col-md-6">
+            <Form.Item>
+              <Button type="primary" htmlType="submit" name="submit">
+                {" "}
+                Submit
+              </Button>
+            </Form.Item>
+          </div>
+        </Form>
+      </Modal>
+    </div>
+  );
 };
 
 export default SingleCustomer;
