@@ -70,7 +70,7 @@ const SingleCustomer: React.FC = () => {
       .then((res: any) => {
         loadAllOppertunites();
       })
-      .catch((err) => {
+      .catch((err:any) => {
         if (err.response.data) {
           message.error({
             content: err.response.data.message,
@@ -99,7 +99,7 @@ const SingleCustomer: React.FC = () => {
       .then((res: any) => {
         loadAllOppertunites();
       })
-      .catch((err) => {
+      .catch((err:any) => {
         setVisible(false);
         if (err.response.data) {
           message.error({
@@ -159,7 +159,7 @@ const SingleCustomer: React.FC = () => {
           );
         }
       })
-      .catch((err) => {
+      .catch((err:any) => {
         console.log(err);
       });
   };
