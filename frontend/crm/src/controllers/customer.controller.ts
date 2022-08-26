@@ -1,16 +1,14 @@
 import { apiHandler } from "../util/api.util";
 
 const api = {
-  allcustomers: "api/customers",
+  cust_api: "api/customers",
+  opper_api: "api/oppertunites",
   oppertunitesCutomer: "api/oppertunites/customer",
-  createOppertunity: "api/oppertunites",
-  updateOppertunity: "api/oppertunites",
-  updateCustomer: "api/customers",
 };
 export const getAllCustomers = (token?: string) => {
   return new Promise((resolve, reject) => {
     return apiHandler
-      .get(`${api.allcustomers}`)
+      .get(`${api.cust_api}`)
       .then((res) => {
         resolve(res);
       })
@@ -35,7 +33,7 @@ export const getOppertuntiesBasedOnCustomer = (userid: string) => {
 export const createOppertunityForCustomr = (data: any) => {
   return new Promise((resolve, reject) => {
     return apiHandler
-      .post(api.createOppertunity, data)
+      .post(api.opper_api, data)
       .then((res) => {
         resolve(res);
       })
@@ -47,7 +45,7 @@ export const createOppertunityForCustomr = (data: any) => {
 export const updateOppertunityForCustomr = (data: any) => {
   return new Promise((resolve, reject) => {
     return apiHandler
-      .put(api.updateOppertunity, data)
+      .put(api.opper_api, data)
       .then((res) => {
         resolve(res);
       })
@@ -60,7 +58,19 @@ export const updateOppertunityForCustomr = (data: any) => {
 export const updateCustomerStatus = (data: any) => {
   return new Promise((resolve, reject) => {
     return apiHandler
-      .put(api.updateCustomer, data)
+      .put(api.cust_api, data)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+export const createCustomer = (data: any) => {
+  return new Promise((resolve, reject) => {
+    return apiHandler
+      .post(api.cust_api, data)
       .then((res) => {
         resolve(res);
       })

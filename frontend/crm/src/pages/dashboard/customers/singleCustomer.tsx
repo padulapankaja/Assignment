@@ -38,7 +38,7 @@ const SingleCustomer: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const [setcustomerDetails]: any = useState();
+  const [customerDetails, setcustomerDetails]: any = useState();
   const [oppertunites, setOppertunites]: any = useState();
   const [editOppertunity, setEditOppertunity]: any = useState();
   const [visible, setVisible] = useState(false);

@@ -11,7 +11,6 @@ const CustomerComponent: FC<Customer> = () => {
     <>
       <Layout className="layout-default layout-signin">
         <Content className="signin" style={{ paddingTop: "0px" }}>
-          <Title style={{ fontSize: "18px" }}>Customers</Title>
           <Row>
             <Col
               xs={{ span: 24, offset: 0 }}
