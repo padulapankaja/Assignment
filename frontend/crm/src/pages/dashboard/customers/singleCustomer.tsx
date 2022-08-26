@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, EditFilled } from "@ant-design/icons";
 import type { InputRef } from "antd";
 import {
   Button,
@@ -9,13 +9,14 @@ import {
   Form,
   Select,
   message,
+  Tag,
 } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import Title from "antd/lib/typography/Title";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   getOppertuntiesBasedOnCustomer,
   createOppertunityForCustomr,
@@ -250,6 +251,15 @@ const SingleCustomer: React.FC = () => {
       ),
   });
 
+  const tagSelector = (status: string) => {
+    if (status === "New") {
+      return <Tag color="green">New</Tag>;
+    } else if (status === "Closed-Lost") {
+      return <Tag color="volcano">Closed-Lost</Tag>;
+    } else {
+      return <Tag color="cyan">Closed-Won</Tag>;
+    }
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",
@@ -268,15 +278,18 @@ const SingleCustomer: React.FC = () => {
       ...getColumnSearchProps("status"),
       sorter: (a, b) => a.status.length - b.status.length,
       sortDirections: ["descend", "ascend"],
+      render: (_, record) => (
+        <Space size="middle" key={record._id}>
+          {tagSelector(record.status)}
+        </Space>
+      ),
     },
     {
       title: "Action",
       key: "action",
       width: "20%",
       render: (_, record) => (
-        <Button type="primary" onClick={() => showModal(record)}>
-          Update Status
-        </Button>
+        <Button onClick={() => showModal(record)}>Update Status</Button>
       ),
     },
   ];

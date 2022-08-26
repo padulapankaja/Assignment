@@ -9,6 +9,7 @@ import {
   Modal,
   Select,
   message,
+  Tag,
 } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
@@ -206,6 +207,15 @@ const AllCustomer: React.FC = () => {
       ),
   });
 
+  const tagSelector = (status: string) => {
+    if (status === "Active") {
+      return <Tag color="green">Active</Tag>;
+    } else if (status === "Non-Active") {
+      return <Tag color="blue">Non Active</Tag>;
+    } else {
+      return <Tag color="orange">Lead</Tag>;
+    }
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",
@@ -233,6 +243,11 @@ const AllCustomer: React.FC = () => {
       ...getColumnSearchProps("status"),
       sorter: (a, b) => a.status.length - b.status.length,
       sortDirections: ["descend", "ascend"],
+      render: (_, record) => (
+        <Space size="middle" key={record._id}>
+          {tagSelector(record.status)}
+        </Space>
+      ),
     },
     {
       title: "Action",
