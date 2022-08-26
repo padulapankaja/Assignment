@@ -14,11 +14,13 @@ import {
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import React, { useRef, useState, useEffect } from "react";
+import Title from "antd/lib/typography/Title";
 import Highlighter from "react-highlight-words";
 import { useHistory } from "react-router-dom";
 import {
   getAllCustomers,
   updateCustomerStatus,
+  createCustomer
 } from "../../../controllers/customer.controller";
 import  dayjs from 'dayjs'
 
@@ -40,6 +42,7 @@ const AllCustomer: React.FC = () => {
   const [allCustomers, setAllCustomers]: any = useState();
   const history = useHistory();
   const [form2] = Form.useForm();
+  const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [editCustomer, setEditCustomer]: any = useState();
@@ -82,6 +85,37 @@ const AllCustomer: React.FC = () => {
           content: "Successfully update a customer",
         });
         form2.resetFields();
+      })
+      .then((res: any) => {
+        loadAllCustomers();
+      })
+      .catch((err) => {
+        setVisible(false);
+        if (err.response.data) {
+          message.error({
+            content: err.response.data.message,
+          });
+        } else {
+          message.error({
+            content: "Please check network connection",
+          });
+        }
+      });
+  };
+  const onFinish = (values: any) => {
+    const data: any = {
+      status: values.status,
+      name: values.name,
+      email: values.email,
+    };
+
+    createCustomer(data)
+      .then((res: any) => {
+        setVisible(false);
+        message.success({
+          content: "Successfully create a customer",
+        });
+        form.resetFields();
       })
       .then((res: any) => {
         loadAllCustomers();
@@ -287,7 +321,75 @@ const AllCustomer: React.FC = () => {
 
   return (
     <div>
-      {" "}
+      {" "}<Title level={3}>Add Customer</Title>
+      <Form
+        layout="vertical"
+        className="row-col"
+        form={form}
+        onFinish={onFinish}
+        name="addCustomer"
+        scrollToFirstError
+      >
+        <div className="row">
+          <div className="col-md-6">
+            <Form.Item
+              label="Name"
+              className="username"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input customer name!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
+          <div className="col-md-6">
+            <Form.Item
+              label="Email"
+              className="username"
+              name="email"
+              rules={[
+                {
+                  type: "email",
+                  message: "The input is not valid e-mail!",
+                },
+                {
+                  required: true,
+                  message: "Please input your email!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
+          <div className="col-md-6">
+            <Form.Item
+              label="Status"
+              className="username"
+              name="status"
+              rules={[{ required: true, message: "Please select status!" }]}
+            >
+              <Select placeholder="select status">
+                <Select.Option value="Active">Active</Select.Option>
+                <Select.Option value="Non-Active">Non-Active</Select.Option>
+                <Select.Option value="Lead">Lead</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="col-md-8">
+            <Form.Item>
+              <Button type="primary" htmlType="submit" name="submit">
+                {" "}
+                Submit
+              </Button>
+            </Form.Item>
+          </div>
+        </div>
+      </Form>
+      <Title level={3}>All Customers</Title>
       <Table columns={columns} dataSource={allCustomers} key={1} />{" "}
       <Modal
         title={`${editCustomer && editCustomer.name}`}
