@@ -9,7 +9,7 @@ import {
   Modal,
   Select,
   message,
-  Tag,
+  Tag
 } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
@@ -20,6 +20,8 @@ import {
   getAllCustomers,
   updateCustomerStatus,
 } from "../../../controllers/customer.controller";
+import  dayjs from 'dayjs'
+
 interface DataType {
   key: React.Key;
   _id: string;
@@ -216,6 +218,7 @@ const AllCustomer: React.FC = () => {
       return <Tag color="orange">Lead</Tag>;
     }
   };
+  
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",
@@ -246,6 +249,20 @@ const AllCustomer: React.FC = () => {
       render: (_, record) => (
         <Space size="middle" key={record._id}>
           {tagSelector(record.status)}
+        </Space>
+      ),
+    },
+    {
+      title: "Create at ",
+      dataIndex: "created_at",
+      key: "created_at",
+      width: "20%",
+      ...getColumnSearchProps("created_at"),
+      sorter: (a, b) => a.status.length - b.status.length,
+      sortDirections: ["descend", "ascend"],
+      render: (_, record) => (
+        <Space size="middle" key={record._id}>
+          {dayjs(record.created_at).format('DD/MM/YYYY hh:mm:a')}
         </Space>
       ),
     },
