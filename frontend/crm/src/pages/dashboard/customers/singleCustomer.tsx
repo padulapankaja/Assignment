@@ -1,4 +1,4 @@
-import { SearchOutlined, EditFilled } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
 import {
   Button,
@@ -38,7 +38,7 @@ const SingleCustomer: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const [customerDetails, setcustomerDetails]: any = useState();
+  const [setcustomerDetails]: any = useState();
   const [oppertunites, setOppertunites]: any = useState();
   const [editOppertunity, setEditOppertunity]: any = useState();
   const [visible, setVisible] = useState(false);
@@ -49,6 +49,7 @@ const SingleCustomer: React.FC = () => {
   const id: any = useParams();
   useEffect(() => {
     loadAllOppertunites();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onFinish = (values: any) => {

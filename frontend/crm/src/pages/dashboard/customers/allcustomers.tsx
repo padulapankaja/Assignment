@@ -9,7 +9,7 @@ import {
   Modal,
   Select,
   message,
-  Tag,
+  Tag
 } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
@@ -218,6 +218,7 @@ const AllCustomer: React.FC = () => {
       return <Tag color="orange">Lead</Tag>;
     }
   };
+  
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",

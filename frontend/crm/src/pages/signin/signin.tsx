@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import {
   Form,
   Input,
@@ -10,7 +10,7 @@ import {
   Layout,
 } from "antd";
 
-import { Link, useHistory } from "react-router-dom";
+import {  useHistory } from "react-router-dom";
 
 import signinbg from "../../assets/images/img-signin.jpg";
 import "../../assets/styles/signin.css";
