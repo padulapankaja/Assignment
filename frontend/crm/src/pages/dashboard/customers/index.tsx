@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { Row, Col, Layout, Typography } from "antd";
-import AllCustomers from './allcustomers'
+import AllCustomers from "./allcustomers";
 
 const { Content } = Layout;
 const { Title } = Typography;
-interface Events {}
+interface Customer {}
 
-const EventComponent: FC<Events> = () => {
+const CustomerComponent: FC<Customer> = () => {
   return (
     <>
       <Layout className="layout-default layout-signin">
@@ -18,7 +18,7 @@ const EventComponent: FC<Events> = () => {
               lg={{ span: 24, offset: 0 }}
               md={{ span: 24, offset: 0 }}
             >
-                <AllCustomers/>
+              <AllCustomers />
             </Col>
           </Row>
         </Content>
@@ -27,4 +27,4 @@ const EventComponent: FC<Events> = () => {
   );
 };
 
-export default EventComponent;
+export default CustomerComponent;

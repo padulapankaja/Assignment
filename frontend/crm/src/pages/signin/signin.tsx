@@ -21,8 +21,21 @@ interface SignInProps {}
 
 const SignIn: FC<SignInProps> = () => {
   const history = useHistory();
+  const [form] = Form.useForm();
+
   const onFinish = async (values: any) => {
-    history.push("/dashboard");
+    console.log(values);
+    if (
+      values.email === "admin@gmail.com" &&
+      values.password === "Default@123"
+    ) {
+      history.push("/dashboard");
+    } else {
+      form.resetFields();
+      message.error({
+        content: "Invalid user credentials",
+      });
+    }
   };
   return (
     <>
@@ -35,21 +48,26 @@ const SignIn: FC<SignInProps> = () => {
               md={{ span: 12 }}
             >
               <Title className="mb-15">Sign In</Title>
-              <Form onFinish={onFinish} layout="vertical" className="row-col">
+              <Form
+                onFinish={onFinish}
+                layout="vertical"
+                className="row-col"
+                form={form}
+              >
                 <Form.Item
                   className="username"
                   label="Email"
                   name="email"
-                  // rules={[
-                  //   {
-                  //     type: "email",
-                  //     message: "The input is not valid e-mail!",
-                  //   },
-                  //   {
-                  //     required: true,
-                  //     message: "Please input your email!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      type: "email",
+                      message: "The input is not valid e-mail!",
+                    },
+                    {
+                      required: true,
+                      message: "Please input your email!",
+                    },
+                  ]}
                 >
                   <Input placeholder="Email" />
                 </Form.Item>
@@ -58,12 +76,12 @@ const SignIn: FC<SignInProps> = () => {
                   className="username"
                   label="Password"
                   name="password"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Please input your password!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your password!",
+                    },
+                  ]}
                 >
                   <Input.Password
                     placeholder="Password"
@@ -84,11 +102,6 @@ const SignIn: FC<SignInProps> = () => {
                     SIGN IN
                   </Button>
                 </Form.Item>
-                {/* <p className="font-semibold text-muted">
-                  <Link to="/forget" style={{ color: "gray" }}>
-                    Forget Password?
-                  </Link>
-                </p> */}
               </Form>
             </Col>
             <Col

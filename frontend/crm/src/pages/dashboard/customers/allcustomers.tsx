@@ -9,13 +9,17 @@ import {
   Modal,
   Select,
   message,
+  Tag,
 } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
-import { Link, useHistory } from "react-router-dom";
-import { getAllCustomers } from "../../../controllers/customer.controller";
+import { useHistory } from "react-router-dom";
+import {
+  getAllCustomers,
+  updateCustomerStatus,
+} from "../../../controllers/customer.controller";
 interface DataType {
   key: React.Key;
   _id: string;
@@ -49,8 +53,6 @@ const AllCustomer: React.FC = () => {
   };
 
   const handleOk = (values: any) => {
-    console.log(values);
-
     setConfirmLoading(true);
 
     setTimeout(() => {
@@ -61,7 +63,6 @@ const AllCustomer: React.FC = () => {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
     form2.resetFields();
   };
@@ -71,32 +72,30 @@ const AllCustomer: React.FC = () => {
       status: values.edit_status,
       _id: editCustomer._id,
     };
-    console.log(data);
 
-    // updateOppertunityForCustomr(data)
-    //   .then((res: any) => {
-    //     setVisible(false);
-    //     message.success({
-    //       content: "Successfully update a customer",
-    //     });
-    //     console.log(res.data);
-    //     form2.resetFields();
-    //   })
-    //   .then((res: any) => {
-    //     loadAllCustomers();
-    //   })
-    //   .catch((err) => {
-    //     setVisible(false);
-    //     if (err.response.data) {
-    //       message.error({
-    //         content: err.response.data.message,
-    //       });
-    //     } else {
-    //       message.error({
-    //         content: "Please check network connection",
-    //       });
-    //     }
-    //   });
+    updateCustomerStatus(data)
+      .then((res: any) => {
+        setVisible(false);
+        message.success({
+          content: "Successfully update a customer",
+        });
+        form2.resetFields();
+      })
+      .then((res: any) => {
+        loadAllCustomers();
+      })
+      .catch((err) => {
+        setVisible(false);
+        if (err.response.data) {
+          message.error({
+            content: err.response.data.message,
+          });
+        } else {
+          message.error({
+            content: "Please check network connection",
+          });
+        }
+      });
   };
 
   const loadAllCustomers = () => {
@@ -110,9 +109,7 @@ const AllCustomer: React.FC = () => {
         });
         setAllCustomers(data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   const handleSearch = (
     selectedKeys: string[],
@@ -210,6 +207,15 @@ const AllCustomer: React.FC = () => {
       ),
   });
 
+  const tagSelector = (status: string) => {
+    if (status === "Active") {
+      return <Tag color="green">Active</Tag>;
+    } else if (status === "Non-Active") {
+      return <Tag color="blue">Non Active</Tag>;
+    } else {
+      return <Tag color="orange">Lead</Tag>;
+    }
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",
@@ -237,6 +243,11 @@ const AllCustomer: React.FC = () => {
       ...getColumnSearchProps("status"),
       sorter: (a, b) => a.status.length - b.status.length,
       sortDirections: ["descend", "ascend"],
+      render: (_, record) => (
+        <Space size="middle" key={record._id}>
+          {tagSelector(record.status)}
+        </Space>
+      ),
     },
     {
       title: "Action",

@@ -4,7 +4,7 @@ import config from "./configuration.json";
 export const apiHandler = {
   get,
   post,
-  put
+  put,
 };
 
 function get(url: string, token?: string) {
@@ -15,14 +15,14 @@ function get(url: string, token?: string) {
   return new Promise((resolve, reject) => {
     return axios
       .get(`${config.host}${url}`, requestOptions)
-      .then(result => {
+      .then((result) => {
         if (result.status === 200) {
           resolve(result.data);
         } else {
           resolve([]);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -36,14 +36,14 @@ function post(url: string, body: any, token?: string) {
   return new Promise((resolve, reject) => {
     return axios
       .post(`${config.host}${url}`, body, requestOptions)
-      .then(result => {
+      .then((result) => {
         if (result.status === 200) {
           resolve(result.data);
         } else {
           resolve([]);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -56,14 +56,14 @@ function put(url: string, body: any, token?: string) {
   return new Promise((resolve, reject) => {
     return axios
       .put(`${config.host}${url}`, body, requestOptions)
-      .then(result => {
+      .then((result) => {
         if (result.status === 200) {
           resolve(result.data);
         } else {
           resolve([]);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });

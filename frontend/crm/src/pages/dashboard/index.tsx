@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "reactstrap";
 import "../../assets/styles/dashboard.css";
-import {
-  withRouter,
-  // BrowserRouter as Router,
-  useHistory,
-  Switch,
-  Route,
-  Link,
-} from "react-router-dom";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import { Layout, Menu, Button as ButtonAnt, PageHeader } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -23,9 +16,8 @@ const Dashboard = () => {
   const { Header, Sider, Content } = Layout;
 
   useEffect(() => {});
-
-  // const history = useHistory();
   const [collapsed, setCollapsed] = useState(false);
+  const history = useHistory();
   return (
     <div style={{ margin: "12px" }}>
       <Row style={{ paddingRight: "0px", paddingLeft: "0px" }}>
@@ -37,9 +29,15 @@ const Dashboard = () => {
                 className="page-header-dark"
                 ghost={false}
                 title="CRM"
-                // subTitle={`Hi, ${user.first_name}`}
                 extra={[
-                  <ButtonAnt key="1" className="cus-btn1" type="primary">
+                  <ButtonAnt
+                    key="1"
+                    className="cus-btn1"
+                    type="primary"
+                    onClick={() => {
+                      history.push("/");
+                    }}
+                  >
                     Signout
                   </ButtonAnt>,
                 ]}
