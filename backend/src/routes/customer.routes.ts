@@ -7,11 +7,11 @@ router.post(
   CustomerController.Validate("create"),
   CustomerController.create_customer
 );
-// router.put(
-//   "/",
-//   CustomerController.Validate("create"),
-//   CustomerController.create_customer
-// );
+router.put(
+  "/",
+  CustomerController.Validate("update"),
+  CustomerController.update_customer_status
+);
 
 router.get("/", CustomerController.get_all_customers);
 

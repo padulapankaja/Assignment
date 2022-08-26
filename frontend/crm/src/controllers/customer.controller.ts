@@ -5,6 +5,7 @@ const api = {
   oppertunitesCutomer: "api/oppertunites/customer",
   createOppertunity: "api/oppertunites",
   updateOppertunity: "api/oppertunites",
+  updateCustomer: "api/customers",
 };
 export const getAllCustomers = (token?: string) => {
   return new Promise((resolve, reject) => {
@@ -44,11 +45,22 @@ export const createOppertunityForCustomr = (data: any) => {
   });
 };
 export const updateOppertunityForCustomr = (data: any) => {
-  console.log(data);
-  
   return new Promise((resolve, reject) => {
     return apiHandler
       .put(api.updateOppertunity, data)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export const updateCustomerStatus = (data: any) => {
+  return new Promise((resolve, reject) => {
+    return apiHandler
+      .put(api.updateCustomer, data)
       .then((res) => {
         resolve(res);
       })

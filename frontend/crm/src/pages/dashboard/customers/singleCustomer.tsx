@@ -15,14 +15,13 @@ import type { FilterConfirmProps } from "antd/es/table/interface";
 import Title from "antd/lib/typography/Title";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import {
   getOppertuntiesBasedOnCustomer,
   createOppertunityForCustomr,
   updateOppertunityForCustomr,
 } from "../../../controllers/customer.controller";
 import "../../../assets/styles/singlecustomer.css";
-import { offset } from "@popperjs/core";
 
 interface DataType {
   key: React.Key;
@@ -33,7 +32,6 @@ interface DataType {
 }
 
 type DataIndex = keyof DataType;
-type SizeType = Parameters<typeof Form>[0]["size"];
 
 const SingleCustomer: React.FC = () => {
   const [searchText, setSearchText] = useState("");
@@ -64,13 +62,12 @@ const SingleCustomer: React.FC = () => {
         message.success({
           content: "Successfully created an oppertunity",
         });
-        console.log(res.data);
         form.resetFields();
       })
       .then((res: any) => {
         loadAllOppertunites();
       })
-      .catch((err:any) => {
+      .catch((err: any) => {
         if (err.response.data) {
           message.error({
             content: err.response.data.message,
@@ -93,13 +90,12 @@ const SingleCustomer: React.FC = () => {
         message.success({
           content: "Successfully update an oppertunity",
         });
-        console.log(res.data);
         form2.resetFields();
       })
       .then((res: any) => {
         loadAllOppertunites();
       })
-      .catch((err:any) => {
+      .catch((err: any) => {
         setVisible(false);
         if (err.response.data) {
           message.error({
@@ -120,8 +116,6 @@ const SingleCustomer: React.FC = () => {
   };
 
   const handleOk = (values: any) => {
-    console.log(values);
-
     setConfirmLoading(true);
 
     setTimeout(() => {
@@ -132,7 +126,6 @@ const SingleCustomer: React.FC = () => {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
     form2.resetFields();
   };
@@ -159,9 +152,7 @@ const SingleCustomer: React.FC = () => {
           );
         }
       })
-      .catch((err:any) => {
-        console.log(err);
-      });
+      .catch((err: any) => {});
   };
   const handleSearch = (
     selectedKeys: string[],

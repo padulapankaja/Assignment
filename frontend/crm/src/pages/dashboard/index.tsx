@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "reactstrap";
 import "../../assets/styles/dashboard.css";
-import {
-  withRouter,
-  // BrowserRouter as Router,
-  useHistory,
-  Switch,
-  Route,
-  Link,
-} from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import { Layout, Menu, Button as ButtonAnt, PageHeader } from "antd";
 import {
   MenuUnfoldOutlined,
